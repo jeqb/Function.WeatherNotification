@@ -20,6 +20,8 @@ namespace Function.WeatherNotification
 
             builder.Services.AddSingleton<IWeatherAnalysisService, WeatherAnalysisService>();
 
+            builder.Services.AddSingleton<ISmsPayloadCreator, SmsPayloadCreator>();
+
             builder.Services.AddSingleton<TableClient>((serviceProvider) =>
             {
                 string storageUri = serviceProvider.GetService<IConfiguration>()["StorageUri"];

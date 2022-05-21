@@ -13,16 +13,22 @@ namespace Function.WeatherNotification.Services
 
         private readonly IWeatherAnalysisService _weatherAnalysisService;
 
+        private readonly ISmsPayloadCreator _smsPayloadCreator;
+
         public WeatherNotificationService(IWeatherForecastClient weatherForecastClient,
-            IWeatherAnalysisService weatherAnalysisService)
+            IWeatherAnalysisService weatherAnalysisService, ISmsPayloadCreator smsPayloadCreator)
         {
             _weatherForecastClient = weatherForecastClient;
 
             _weatherAnalysisService = weatherAnalysisService;
+
+            _smsPayloadCreator = smsPayloadCreator;
         }
 
         public async Task ProcessForecastRequest(ForecastRequestModel forecastRequestModel)
         {
+            // TODO: Add validator class to validate ForecastRequestModel
+
             // request data points
             string notificationPhoneNumber = forecastRequestModel.NotificationPhoneNumber;
 

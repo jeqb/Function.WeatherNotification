@@ -37,9 +37,9 @@ namespace Function.WeatherNotification
                         PropertyNameCaseInsensitive = true,
                     });
 
-                // TODO: STUFF GOES HERE
+                await _weatherNotificationService.ProcessForecastRequest(request);
 
-                // TODO: LOG THAT STUFF HAPPENED
+                log.LogInformation($"Notification sent to PhoneNumber: {request.NotificationPhoneNumber}");
             }
             catch (Exception ex)
             {

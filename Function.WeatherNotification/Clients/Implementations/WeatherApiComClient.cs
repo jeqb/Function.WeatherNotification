@@ -1,4 +1,5 @@
-﻿using Function.WeatherNotification.Clients.Implementations.Models;
+﻿using Function.WeatherNotification.Clients.Exceptions;
+using Function.WeatherNotification.Clients.Implementations.Models;
 using Function.WeatherNotification.Clients.Interfaces;
 using Function.WeatherNotification.Clients.Models;
 using System;
@@ -85,7 +86,7 @@ namespace Function.WeatherNotification.Clients.Implementations
                     DailyWeatherForecast addMe = new()
                     {
                         DateTime = dateTimeOffset.DateTime,
-                        // TODO: DayOfWeek
+                        DayOfWeek = dateTimeOffset.DayOfWeek.ToString(),
                         MinimumTemperatureF = day.Day.MinTempF,
                         MaximumTemperatureF = day.Day.MaxTempF
                     };
@@ -97,8 +98,9 @@ namespace Function.WeatherNotification.Clients.Implementations
             }
             else
             {
-                // TODO: throw some custom exception to say we did not get what we wanted.
-                throw new Exception("It broke");
+                string message = await httpResponse.Content.ReadAsStringAsync();
+
+                throw new ClientHttpException(httpResponse.StatusCode, message);
             }
         }
     }

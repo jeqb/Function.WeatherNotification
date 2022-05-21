@@ -1,5 +1,6 @@
 using Azure.Data.Tables;
 using Function.WeatherNotification.Models;
+using Function.WeatherNotification.Services;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,15 +11,21 @@ namespace Function.WeatherNotification
 {
     public class WeatherNotificationFunction
     {
+        private readonly IWeatherNotificationService _weatherNotificationService;
+
         private readonly TableClient _tableClient;
 
-        public WeatherNotificationFunction(TableClient tableClient)
+        public WeatherNotificationFunction(IWeatherNotificationService weatherNotificationService,
+            TableClient tableClient)
         {
+            _weatherNotificationService = weatherNotificationService;
+
             _tableClient = tableClient;
         }
 
         [FunctionName("WeatherNotificationFunction")]
-        public async Task Run([QueueTrigger("weather-notification-request-queue", Connection = "ConnectionString")]string myQueueItem, ILogger log)
+        public async Task Run([QueueTrigger("%QueueName%", Connection = "ConnectionString")] string myQueueItem,
+            ILogger log)
         {
             log.LogInformation($"WeatherNotificationFunction started with payload: {myQueueItem}");
 

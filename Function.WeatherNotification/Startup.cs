@@ -1,4 +1,5 @@
 ﻿using Azure.Data.Tables;
+using Function.WeatherNotification.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,8 @@ namespace Function.WeatherNotification
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
+
+            builder.Services.AddSingleton<IWeatherNotificationService, WeatherNotificationService>();
 
             builder.Services.AddSingleton<TableClient>((serviceProvider) =>
             {

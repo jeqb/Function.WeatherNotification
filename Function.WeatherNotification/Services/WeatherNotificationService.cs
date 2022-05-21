@@ -1,17 +1,17 @@
-﻿using Function.WeatherNotification.Models;
+﻿using Function.WeatherNotification.Clients.Interfaces;
+using Function.WeatherNotification.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Function.WeatherNotification.Services
 {
     public class WeatherNotificationService : IWeatherNotificationService
     {
-        public WeatherNotificationService()
-        {
+        private readonly IWeatherForecastClient _weatherForecastClient;
 
+        public WeatherNotificationService(IWeatherForecastClient weatherForecastClient)
+        {
+            _weatherForecastClient = weatherForecastClient;
         }
 
         public async Task ProcessForecastRequest(ForecaseRequestModel forecaseRequestModel)

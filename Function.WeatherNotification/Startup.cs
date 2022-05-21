@@ -1,10 +1,8 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Azure.Data.Tables;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 [assembly: FunctionsStartup(typeof(Function.WeatherNotification.Startup))]
 namespace Function.WeatherNotification
@@ -14,6 +12,18 @@ namespace Function.WeatherNotification
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
+
+            builder.Services.AddSingleton<TableClient>((serviceProvider) =>
+            {
+                string storageUri = serviceProvider.GetService<IConfiguration>()["StorageUri"];
+                string tableName = serviceProvider.GetService<IConfiguration>()["StorageTableName"];
+                string storageAccountName = serviceProvider.GetService<IConfiguration>()["StorageAccountName"];
+                string storageAccountKey = serviceProvider.GetService<IConfiguration>()["StorageAccountKey"];
+
+                return new TableClient(new Uri(storageUri), tableName,
+                    new TableSharedKeyCredential(storageAccountName, storageAccountKey)
+                    );
+            });
         }
     }
 }

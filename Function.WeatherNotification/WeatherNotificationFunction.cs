@@ -31,7 +31,7 @@ namespace Function.WeatherNotification
 
             try
             {
-                ForecaseRequestModel request = JsonSerializer.Deserialize<ForecaseRequestModel>(myQueueItem,
+                ForecastRequestModel request = JsonSerializer.Deserialize<ForecastRequestModel>(myQueueItem,
                     new JsonSerializerOptions()
                     {
                         PropertyNameCaseInsensitive = true,

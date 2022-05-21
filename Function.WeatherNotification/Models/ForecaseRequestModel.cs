@@ -1,6 +1,6 @@
 ﻿namespace Function.WeatherNotification.Models
 {
-    public class ForecaseRequestModel
+    public class ForecastRequestModel
     {
         public string PostalCode { get; set; } = string.Empty;
 

@@ -5,6 +5,6 @@ namespace Function.WeatherNotification.Services
 {
     public interface IWeatherNotificationService
     {
-        public Task ProcessForecastRequest(ForecaseRequestModel forecaseRequestModel);
+        public Task ProcessForecastRequest(ForecastRequestModel forecastRequestModel);
     }
 }

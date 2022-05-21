@@ -11,22 +11,37 @@ namespace Function.WeatherNotification.Services
     {
         private readonly IWeatherForecastClient _weatherForecastClient;
 
-        public WeatherNotificationService(IWeatherForecastClient weatherForecastClient)
+        private readonly IWeatherAnalysisService _weatherAnalysisService;
+
+        public WeatherNotificationService(IWeatherForecastClient weatherForecastClient,
+            IWeatherAnalysisService weatherAnalysisService)
         {
             _weatherForecastClient = weatherForecastClient;
+
+            _weatherAnalysisService = weatherAnalysisService;
         }
 
         public async Task ProcessForecastRequest(ForecastRequestModel forecastRequestModel)
         {
+            // request data points
+            string notificationPhoneNumber = forecastRequestModel.NotificationPhoneNumber;
+
             string postalCode = forecastRequestModel.PostalCode;
             int daysOut = forecastRequestModel.DaysOut;
-            string notificationPhoneNumber = forecastRequestModel.NotificationPhoneNumber;
 
             double? minTemp = forecastRequestModel.MinimumTemperature;
             double? maxTemp = forecastRequestModel.MaximumTemperature;
 
-            IEnumerable<DailyWeatherForecast> corecast = await _weatherForecastClient.GetWeatherForeCast(postalCode,
-                daysOut);
+
+            // get the forecast data 
+            IEnumerable<DailyWeatherForecast> forecast = await _weatherForecastClient.GetWeatherForeCast(postalCode,
+                                                                daysOut);
+
+
+            // analyze the forecast given the inputs
+            IEnumerable<DailyWeatherForecast> analysis = await _weatherAnalysisService.AnalyzeForecastAsync(minTemp,
+                                                                maxTemp, forecast);
+
 
             // TODO: maybe store in a table what dates a phone number has been notified of already so 
             // it does not send notification about a date that's already been sent out.

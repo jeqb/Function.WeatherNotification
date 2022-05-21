@@ -14,7 +14,11 @@ namespace Function.WeatherNotification
         {
             builder.Services.AddLogging();
 
+            builder.Services.AddHttpClient();
+
             builder.Services.AddSingleton<IWeatherNotificationService, WeatherNotificationService>();
+
+            builder.Services.AddSingleton<IWeatherAnalysisService, WeatherAnalysisService>();
 
             builder.Services.AddSingleton<TableClient>((serviceProvider) =>
             {
